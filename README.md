@@ -74,3 +74,8 @@ threshold = 1.5 × quiet_sun_mean_intensity
 **Customization:** Modify `THRESHOLD_FACTORS` in `config.py`
 
 For detailed methodology, see [threshold documentation](docs/threshold_methodology.md)
+
+
+##  License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
