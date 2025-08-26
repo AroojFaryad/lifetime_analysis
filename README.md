@@ -1,103 +1,61 @@
-#  Threshold
+#  EB Lifetime Analysis
 
-## Intensity Thresholding for EB Detection
+![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
+![License](https://img.shields.io/badge/License-MIT-green)
 
-### Overview
-This document explains the intensity thresholding method used to distinguish real Ellerman Bombs (EBs) from background noise and filler events.
+Analysis pipeline for studying Ellerman Bomb lifetime distributions with intensity thresholding.
 
-## Threshold Calculation
+## Features
 
-The detection threshold is calculated as:
+- **Multi-dataset processing** of EB sources
+- **Lifetime calculation** from timeframe data
+- **Intensity thresholding** analysis
+- **Statistical comparison** of detection methods
+- **Publication-ready visualizations**
 
-```python
-threshold = threshold_factor × quiet_sun_mean_intensity
+##  Quick Start
+
+### Installation
+
+```bash
+git clone https://github.com/yourusername/eb-lifetime-analysis.git
+cd eb-lifetime-analysis
+pip install -r requirements.txt
 ```
 
-### Formula
-```
-Threshold = k × I_QS
-```
+### Basic Usage
 
-Where:
-- `k` = Threshold factor (default: 1.5)
-- `I_QS` = Mean quiet sun intensity for the dataset
-
-## Example Calculation
-
-For dataset `20140614`:
-- Quiet sun mean intensity: 152.28
-- Threshold factor: 1.5
-
-```python
-threshold = 1.5 × 152.28 = 228.42
+```bash
+python scripts/lifetime_analysis.py
 ```
 
-## Application Criteria
+### Jupyter Notebook
 
-An EB event is considered valid if:
-
-```python
-if np.any(eb_peak_intensity > threshold):
-    # Valid EB detection
-else:
-    # Rejected as noise/filler
+```bash
+jupyter notebook notebooks/exploratory_analysis.ipynb
 ```
 
-##  Default Parameters
+## Data Structure
 
-| Parameter | Value | Description |
-|-----------|-------|-------------|
-| `threshold_factor` | 1.5 | 50% above quiet sun level |
-| `quiet_sun_mean` | Dataset-specific | Calculated from QS regions |
+Place your EB source files in the `data/` directory:
 
-##  Scientific Rationale
-
-### Why 1.5?
-- **Common practice** in solar physics literature
-- **Balances sensitivity** and specificity
-- **Conservative enough** to minimize false positives
-- **Validated** in previous EB studies
-
-### Physical Interpretation
-- `>1.5×QS`: Significant chromospheric heating
-- `≤1.5×QS`: Likely background variations or noise
-
-## Customization
-
-
-```python
-# For stricter detection (fewer, brighter EBs)
-THRESHOLD_FACTORS = [2.0] * len(DATASET_PATHS)
-
-# For more sensitive detection (more, fainter EBs)
-THRESHOLD_FACTORS = [1.2] * len(DATASET_PATHS)
+```
+data/
+├── YYYYMMDD/
+│   ├── sources_S2P0T10.5d3t5.npy
+│   ├── wings.fits
+│   └── qs.txt
 ```
 
-### Per-Dataset Thresholds
-```python
-# Different thresholds for each dataset
-THRESHOLD_FACTORS = [1.5, 1.6, 1.4, 1.5, 1.7, 1.3, 1.5, 1.6]
-```
+Expected NPY file structure:
+- `id`: EB event identifiers
+- `timeframe`: Observation timeframes
+- `peak`: Peak intensity values
+- `filled`: Filler indicators (-1 for fillers)
 
-## Validation Metrics
+##  Outputs
 
-The threshold effectiveness is evaluated by:
-- **Detection statistics** (before/after thresholding)
-- **Lifetime distributions**
-- **Area and contrast properties**
-- **Comparison with visual inspection**
+- `results/lifetime_comparison.pdf`: Lifetime distribution plot
+- Console output: Detailed statistics summary
+- Numerical results: Saved as numpy arrays
 
-
-## ❓ Frequently Asked Questions
-
-### Q: Why use a multiplicative threshold?
-**A:** Solar intensities vary between datasets and observing conditions. A multiplicative threshold adapts to different background levels.
-
-### Q: Can I use absolute intensity values?
-**A:** Yes, but it requires careful calibration and is less robust to changing observing conditions.
-
-### Q: How was the quiet sun mean calculated?
-**A:** The mean intensity is computed from predefined quiet sun regions in the `qs.txt` files for each dataset.
-
-### Q: What percentage of events are typically filtered?
-**A:** Typically, 20-40% of detections are removed as noise, depending on data quality.
