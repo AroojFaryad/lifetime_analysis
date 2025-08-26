@@ -59,3 +59,18 @@ Expected NPY file structure:
 - Console output: Detailed statistics summary
 - Numerical results: Saved as numpy arrays
 
+## 🎯 Threshold Methodology
+
+EB detection uses intensity thresholding to distinguish real events from noise:
+
+```python
+threshold = 1.5 × quiet_sun_mean_intensity
+```
+
+**Criteria:** EB peak intensity must exceed this threshold to be considered valid.
+
+**Default:** 1.5× quiet sun level (50% brighter than background)
+
+**Customization:** Modify `THRESHOLD_FACTORS` in `config.py`
+
+For detailed methodology, see [Threshold Documentation](docs/threshold_methodology.md)
